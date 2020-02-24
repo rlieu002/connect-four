@@ -1,3 +1,11 @@
+## TODO
+- Update README
+- Additional tests
+- Additional checks on `figureNextMove`
+
+## Mode
+Choose between 1 Player (vs AI) or 2 Players.
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
