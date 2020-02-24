@@ -1,3 +1,5 @@
+[PLAY!](https://www.google.com "Play Game")
+
 ## TODO
 - Update README
 - Additional tests
