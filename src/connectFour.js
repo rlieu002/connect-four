@@ -194,23 +194,20 @@ const checkMoves = (gameState, color, type) => {
     checkColor = color;
   }
 
-  loop:
   for (let row = gameState.length - 1; row >= 0; row--) {
     for (let column = 0; column < 7; column++) {
       if (gameState[row][column] === checkColor) {
         const [connectedRow, endColumn] = countConnectedRow(gameState[row], column);
         if (endColumn <= 5 && connectedRow >= 2) {
           console.log('connected row:', connectedRow, 'row:', row, 'column:', column);
-          let noRowBelow = false;
-          for (let i = row + 1; i < gameState.length; i++) {
-            if (!gameState[i][endColumn + 1]) noRowBelow = true;
-          }
-          if (!gameState[row][endColumn + 1] && !noRowBelow) {
+          if (!gameState[row][endColumn + 1]) {
             columnRec = endColumn + 1;
-            break loop;
+            const emptyBelow = checkEmptyBelow(gameState, row, columnRec);
+            if(!emptyBelow) return columnRec;
           } else if (column > 0 && !gameState[row][column - 1]) {
             columnRec = column - 1;
-            break loop;
+            const emptyBelow = checkEmptyBelow(gameState, row, columnRec);
+            if (!emptyBelow) return columnRec;
           }
         } else if (row >= 3) {
           const connectedColumnStraight = countConnectedColumn(gameState, row, column, 'straight')[0];
@@ -221,13 +218,15 @@ const checkMoves = (gameState, color, type) => {
           console.log('connected column backward:', connectedColumnBackward, 'row:', row, 'column:', column);
           if (connectedColumnStraight >= 3) {
             columnRec = column;
-            break loop;
+            return columnRec;
           } else if (connectedColumnForward >= 3 && row[endColumnForward + 1]) {
             columnRec = endColumnForward + 1;
-            break loop;
+            const emptyBelow = checkEmptyBelow(gameState, row, columnRec);
+            if (!emptyBelow) return columnRec;
           } else if (connectedColumnBackward >= 3 && row[column - 1]) {
             columnRec = column - 1;
-            break loop;
+            const emptyBelow = checkEmptyBelow(gameState, row, columnRec);
+            if (!emptyBelow) return columnRec;
           }
         }
       }
@@ -235,6 +234,19 @@ const checkMoves = (gameState, color, type) => {
   }
   
   return columnRec;
+}
+
+// checks for empty rows
+const checkEmptyBelow = (gameState, row, column) => {
+  debugger;
+  let emptyBelow = false;
+  if (row < gameState.length - 1) {
+    for (let i = row + 1; i < gameState.length; i++) {
+      if (!gameState[i][column]) emptyBelow = true;
+    }
+  }
+
+  return emptyBelow;
 }
 
 // Bonus
