@@ -1,4 +1,4 @@
-[PLAY!](https://www.google.com "Play Game")
+[PLAY!](https://connect-four-bced7.firebaseapp.com/ "Play Game")
 
 ## TODO
 - Update README
