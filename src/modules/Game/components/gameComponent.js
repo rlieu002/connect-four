@@ -26,8 +26,8 @@ export default class Game extends Component {
 
   renderTable() {
     const { gameState } = this.state;
-    const tableRows = gameState.map(row => {
-      const columns = row.map(column => {
+    const tableRows = gameState.map((row, rowIndex) => {
+      const columns = row.map((column, columnIndex) => {
         let style = {};
         if (column === "y") {
           style = styles.yellowPlayer;
@@ -36,19 +36,18 @@ export default class Game extends Component {
         }
 
         return (
-          <td style={styles.cell}>
+          <td key={columnIndex} style={styles.cell}>
             <div style={style}></div>
           </td>
         );
       });
 
-      return <tr>{columns}</tr>;
+      return <tr key={rowIndex}>{columns}</tr>;
     });
 
     const buttonRow = [0, 1, 2, 3, 4, 5, 6].map(button => (
-      <td style={styles.cell}>
+      <td key={button} style={styles.cell}>
         <button
-          key={button}
           style={styles.moveButton}
           onClick={this.onClickMove}
           value={button}

@@ -79,11 +79,21 @@ export const winner = gameState => {
  * @return column represented as a number
  */
 export const figureNextMove = (gameState, color) => {
-  const defenseMove = checkMoves(gameState, color, "defense");
-  if (defenseMove !== null) return defenseMove;
+  const move = nextMove(gameState, color, 3);
 
-  const offenseMove = checkMoves(gameState, color);
-  return offenseMove ? offenseMove : Math.floor(Math.random() * 6);
+  return move !== null ? move : Math.floor(Math.random() * 6);
+};
+
+const nextMove = (gameState, color, numConnected) => {
+  let counter = numConnected;
+  while (counter > 0) {
+    const offenseMove = checkMoves(gameState, color, counter);
+    if (offenseMove !== null) return offenseMove;
+    const defenseMove = checkMoves(gameState, color, counter, "defense");
+    if (defenseMove !== null) return defenseMove;
+    counter--;
+  }
+  return null;
 };
 
 // Bonus
@@ -151,20 +161,3 @@ export const figureNextMove = (gameState, color) => {
 
 //   return false;
 // }
-
-// Test
-// const testGameState = [
-// [null, null, null, null, null, null, null],
-// [null, null, null, 'r', null, null, null],
-// ['r', null, null, 'r', null, null, null],
-// ['y', null, 'r', 'y', null, null, null],
-// ['r', 'y', 'y', 'r', 'y', null, null],
-// ['r', 'y', 'y', 'y', 'r', null, null],
-// ];
-
-// const currentPlayer = getCurrentPlayer(testGameState);
-// console.log('current player:', currentPlayer);
-// console.log('valid state:', isStateValid(testGameState));
-// console.log('new game state:', play(testGameState, 0, currentPlayer));
-// console.log('winner exists:', winner(testGameState));
-// console.log('next move:', figureNextMove(testGameState, currentPlayer));
