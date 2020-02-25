@@ -63,13 +63,14 @@ const countConnectedColumn = (gameState, row, column, type) => {
   let numConnected = 1;
   let endColumn = column;
 
+  loop:
   for (let i = row; i > row - 3; i--) {
     switch (type) {
       case "straight":
         if (gameState[i][column] === gameState[i - 1][column]) {
           numConnected++;
         } else {
-          numConnected = 1;
+          break loop;
         }
         break;
       case "forward":
@@ -79,7 +80,7 @@ const countConnectedColumn = (gameState, row, column, type) => {
         ) {
           numConnected++;
         } else {
-          numConnected = 1;
+          break loop;
         }
         endColumn++;
         break;
@@ -90,7 +91,7 @@ const countConnectedColumn = (gameState, row, column, type) => {
         ) {
           numConnected++;
         } else {
-          numConnected = 1;
+          break loop;
         }
         endColumn--;
         break;
@@ -183,7 +184,7 @@ const checkMovesColumnStraight = (gameState, row, column, numConnected) => {
     "straight"
   )[0];
   log("column straight", connectedColumnStraight, row, column);
-  if (connectedColumnStraight >= numConnected) {
+  if (connectedColumnStraight >= numConnected && getRow(gameState, column) !== undefined) {
     return column;
   }
   return null;
@@ -197,7 +198,7 @@ const checkMovesColumnForward = (gameState, row, column, numConnected) => {
     "forward"
   );
   log("column forward", connectedColumnForward, row, column);
-  if (connectedColumnForward >= numConnected && row[endColumnForward + 1]) {
+  if (connectedColumnForward >= numConnected && row[endColumnForward + 1] && getRow(gameState, column) !== undefined) {
     const columnRec = endColumnForward + 1;
     const emptyBelow = checkEmptyBelow(gameState, row, columnRec);
     if (!emptyBelow) return columnRec;
@@ -213,7 +214,7 @@ const checkMovesColumnBackward = (gameState, row, column, numConnected) => {
     "backward"
   )[0];
   log("column backward", connectedColumnBackward, row, column);
-  if (connectedColumnBackward >= numConnected && row[column - 1]) {
+  if (connectedColumnBackward >= numConnected && row[column - 1] && getRow(gameState, column) !== undefined) {
     const columnRec = column - 1;
     const emptyBelow = checkEmptyBelow(gameState, row, columnRec);
     if (!emptyBelow) return columnRec;
