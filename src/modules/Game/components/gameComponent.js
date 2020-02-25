@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import * as cf from '../connectFour';
-import logo from '../../../assets/logo.svg';
+import React, { Component } from "react";
+import * as cf from "../connectFour";
+import logo from "../../../assets/logo.svg";
 
 export default class Game extends Component {
   constructor() {
@@ -13,10 +13,10 @@ export default class Game extends Component {
         [null, null, null, null, null, null, null],
         [null, null, null, null, null, null, null],
         [null, null, null, null, null, null, null],
-        [null, null, null, null, null, null, null],
+        [null, null, null, null, null, null, null]
       ],
-      mode: '1',
-      winner: null,
+      mode: "1",
+      winner: null
     };
 
     this.onClickMove = this.onClickMove.bind(this);
@@ -29,9 +29,9 @@ export default class Game extends Component {
     const tableRows = gameState.map(row => {
       const columns = row.map(column => {
         let style = {};
-        if (column === 'y') {
+        if (column === "y") {
           style = styles.yellowPlayer;
-        } else if (column === 'r') {
+        } else if (column === "r") {
           style = styles.redPlayer;
         }
 
@@ -42,12 +42,10 @@ export default class Game extends Component {
         );
       });
 
-      return (
-        <tr>{columns}</tr>
-      );
+      return <tr>{columns}</tr>;
     });
 
-    const buttonRow = [0, 1, 2, 3, 4, 5, 6].map(button => 
+    const buttonRow = [0, 1, 2, 3, 4, 5, 6].map(button => (
       <td style={styles.cell}>
         <button
           key={button}
@@ -56,7 +54,7 @@ export default class Game extends Component {
           value={button}
         ></button>
       </td>
-    );
+    ));
 
     return (
       <table border="1">
@@ -79,19 +77,22 @@ export default class Game extends Component {
 
       const newGameState = cf.play(gameState, move, color);
       if (cf.isStateValid(newGameState)) {
-        this.setState({
-          gameState: newGameState,
-        }, () => {
-          let winner = cf.winner(newGameState);
-          if (winner) {
-            winner = color === 'y' ? 'yellow' : 'red';
-            this.setState({ winner });
-          } else if (mode === '1') {
-            this.computerMove();
+        this.setState(
+          {
+            gameState: newGameState
+          },
+          () => {
+            let winner = cf.winner(newGameState);
+            if (winner) {
+              winner = color === "y" ? "yellow" : "red";
+              this.setState({ winner });
+            } else if (mode === "1") {
+              this.computerMove();
+            }
           }
-        });
+        );
       } else {
-        console.error('invalid game state');
+        console.error("invalid game state");
       }
     }
   }
@@ -103,38 +104,43 @@ export default class Game extends Component {
       [null, null, null, null, null, null, null],
       [null, null, null, null, null, null, null],
       [null, null, null, null, null, null, null],
-      [null, null, null, null, null, null, null],
+      [null, null, null, null, null, null, null]
     ];
     this.setState({
       gameState: newGameState,
-      winner: null,
+      winner: null
     });
   }
 
   computerMove() {
     const { gameState } = this.state;
-    const color = 'r';
+    const color = "r";
     const move = cf.figureNextMove(gameState, color);
     const newGameState = cf.play(gameState, move, color);
     if (cf.isStateValid(newGameState)) {
-      this.setState({
-        gameState: newGameState,
-      }, () => {
-        let winner = cf.winner(newGameState);
-        if (winner) {
-          winner = color === 'y' ? 'yellow' : 'red';
-          this.setState({ winner });
+      this.setState(
+        {
+          gameState: newGameState
+        },
+        () => {
+          let winner = cf.winner(newGameState);
+          if (winner) {
+            winner = color === "y" ? "yellow" : "red";
+            this.setState({ winner });
+          }
         }
-      });
+      );
     } else {
-      console.error('invalid game state');
+      console.error("invalid game state");
     }
   }
 
   render() {
     const { winner } = this.state;
-    const button1 = this.state.mode === '1' ? styles.activeButton : styles.button;
-    const button2 = this.state.mode === '2' ? styles.activeButton : styles.button;
+    const button1 =
+      this.state.mode === "1" ? styles.activeButton : styles.button;
+    const button2 =
+      this.state.mode === "2" ? styles.activeButton : styles.button;
 
     return (
       <div className="App">
@@ -142,11 +148,17 @@ export default class Game extends Component {
           <img src={logo} className="App-logo" alt="logo" width="100px" />
           {winner && <h1>{winner} wins!</h1>}
           <div style={styles.modeContainer}>
-            <button style={button1} onClick={this.toggleMode} value="1">1 Player</button>
-            <button style={button2} onClick={this.toggleMode} value="2">2 Players</button>
+            <button style={button1} onClick={this.toggleMode} value="1">
+              1 Player
+            </button>
+            <button style={button2} onClick={this.toggleMode} value="2">
+              2 Players
+            </button>
           </div>
           {this.renderTable()}
-          <button style={styles.button} onClick={this.onClickRestart}>Restart</button>
+          <button style={styles.button} onClick={this.onClickRestart}>
+            Restart
+          </button>
         </header>
       </div>
     );
@@ -155,42 +167,42 @@ export default class Game extends Component {
 
 const styles = {
   yellowPlayer: {
-    borderRadius: '25px',
-    backgroundColor: 'yellow',
-    width: '40px',
-    height: '40px',
-    margin: 'auto',
+    borderRadius: "25px",
+    backgroundColor: "yellow",
+    width: "40px",
+    height: "40px",
+    margin: "auto"
   },
   redPlayer: {
-    borderRadius: '25px',
-    backgroundColor: 'red',
-    width: '40px',
-    height: '40px',
-    margin: 'auto',
+    borderRadius: "25px",
+    backgroundColor: "red",
+    width: "40px",
+    height: "40px",
+    margin: "auto"
   },
   cell: {
-    width: '50px',
-    height: '50px',
+    width: "50px",
+    height: "50px"
   },
   moveButton: {
-    width: '40px',
-    height: '40px',
+    width: "40px",
+    height: "40px"
   },
   button: {
-    width: '120px',
-    height: '40px',
-    margin: '10px',
-    cursor: 'pointer',
+    width: "120px",
+    height: "40px",
+    margin: "10px",
+    cursor: "pointer"
   },
   activeButton: {
-    width: '120px',
-    height: '40px',
-    margin: '10px',
-    cursor: 'pointer',
-    backgroundColor: 'grey',
+    width: "120px",
+    height: "40px",
+    margin: "10px",
+    cursor: "pointer",
+    backgroundColor: "grey"
   },
   modeContainer: {
-    display: 'flex',
-    justifyContent: 'flex-end',
+    display: "flex",
+    justifyContent: "flex-end"
   }
 };

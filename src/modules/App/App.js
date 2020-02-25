@@ -1,11 +1,9 @@
-import React from 'react';
-import Game from '../Game/components/gameComponent';
-import './App.css';
+import React from "react";
+import Game from "../Game/components/gameComponent";
+import "./App.css";
 
 function App() {
-  return (
-    <Game />
-  );
+  return <Game />;
 }
 
 export default App;
