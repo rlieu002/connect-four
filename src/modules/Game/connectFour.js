@@ -24,7 +24,7 @@ export const getCurrentPlayer = gameState => {
  * @return valid game state represented by boolean
  */
 export const isStateValid = gameState => {
-  if(!gameState) return false;
+  if (!gameState) return false;
   const [numYellow, numRed] = countColors(gameState);
 
   // anomalies include:
