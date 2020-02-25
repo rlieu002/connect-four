@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import * as cf from './connectFour';
-import logo from './logo.svg';
+import * as cf from '../connectFour';
+import logo from '../../../assets/logo.svg';
 
 export default class Game extends Component {
   constructor() {
