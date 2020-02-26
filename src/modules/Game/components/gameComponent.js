@@ -11,9 +11,9 @@ export default class Game extends Component {
         [null, null, null, null, null, null, null],
         [null, null, null, null, null, null, null],
         [null, null, null, null, null, null, null],
-        [null, null, null, null, null, null, null],
-        [null, null, null, null, null, null, null],
-        [null, null, null, null, null, null, null]
+        [null, null, null, "r", null, null, null],
+        [null, null, "y", "y", "r", null, null],
+        [null, null, "y", "y", "r", "r", null]
       ],
       mode: "1",
       winner: null

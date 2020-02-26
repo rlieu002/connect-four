@@ -204,19 +204,29 @@ const checkMovesColumnForward = (gameState, row, column, numConnected) => {
   log("column forward", connectedColumnForward, row, column);
   const columnRecRight = endColumnForward + 1;
   const checkRowRight = row - numConnected;
-  const emptyBelowRight = checkEmptyBelow(gameState, checkRowRight, columnRecRight);
+  const emptyBelowRight = checkEmptyBelow(
+    gameState,
+    checkRowRight,
+    columnRecRight
+  );
   if (
     connectedColumnForward >= numConnected &&
     gameState[checkRowRight][columnRecRight] === null &&
     getRow(gameState, column) !== undefined &&
     !emptyBelowRight
-  ) return columnRecRight;
+  )
+    return columnRecRight;
 
-  if (row < 5 && column > 0) {
+  if (row > 0 && column > 0) {
     const columnRecLeft = column - 1;
-    const checkRowLeft = row + 1;
-    const emptyBelowLeft = checkEmptyBelow(gameState, checkRowLeft, columnRecLeft);
-    if (gameState[checkRowLeft][columnRecLeft] === null && !emptyBelowLeft) return columnRecLeft;
+    const checkRowLeft = row - 1;
+    const emptyBelowLeft = checkEmptyBelow(
+      gameState,
+      checkRowLeft,
+      columnRecLeft
+    );
+    if (gameState[checkRowLeft][columnRecLeft] === null && !emptyBelowLeft)
+      return columnRecLeft;
   }
 
   return null;
@@ -233,18 +243,25 @@ const checkMovesColumnBackward = (gameState, row, column, numConnected) => {
   const columnRecRight = endColumnBackward - 1;
   const checkRowRight = row - numConnected;
   const emptyBelow = checkEmptyBelow(gameState, checkRowRight, columnRecRight);
+  debugger;
   if (
     connectedColumnBackward >= numConnected &&
     gameState[checkRowRight][columnRecRight] === null &&
     getRow(gameState, column) !== undefined &&
     !emptyBelow
-  ) return columnRecRight;
+  )
+    return columnRecRight;
 
-  if (row > 0 && column < 6) {
+  if (row < 5 && column < 6) {
     const columnRecLeft = column + 1;
-    const checkRowLeft = row - 1;
-    const emptyBelowLeft = checkEmptyBelow(gameState, checkRowLeft, columnRecLeft);
-    if (gameState[checkRowLeft][columnRecLeft] === null && !emptyBelowLeft) return columnRecLeft;
+    const checkRowLeft = row + 1;
+    const emptyBelowLeft = checkEmptyBelow(
+      gameState,
+      checkRowLeft,
+      columnRecLeft
+    );
+    if (gameState[checkRowLeft][columnRecLeft] === null && !emptyBelowLeft)
+      return columnRecLeft;
   }
 
   return null;
