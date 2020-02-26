@@ -1,18 +1,22 @@
-[PLAY!](https://connect-four-bced7.firebaseapp.com/ "Play Game")
+# Connect Four Game
 
-## TODO
-- Update README
-- Additional tests
-- Additional checks on `figureNextMove`
+[PLAY NOW!](https://connect-four-bced7.firebaseapp.com/ "Play Game")
+
+![Connect Four](https://camo.githubusercontent.com/a5634c85696758666de88b38f78700aeda541944/68747470733a2f2f75706c6f61642e77696b696d656469612e6f72672f77696b6970656469612f636f6d6d6f6e732f7468756d622f612f61642f436f6e6e6563745f466f75722e6769662f32323070782d436f6e6e6563745f466f75722e676966)
 
 ## Mode
 Choose between 1 Player (vs AI) or 2 Players.
+
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
 
 In the project directory, you can run:
+
+### `yarn format`
+
+Formats code using [Prettier](https://prettier.io/)
 
 ### `yarn start`
 
