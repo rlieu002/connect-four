@@ -166,7 +166,8 @@ const checkMovesRow = (gameState, row, column, numConnected) => {
       const columnRec = endColumn + 1;
       const emptyBelow = checkEmptyBelow(gameState, row, columnRec);
       if (!emptyBelow) return columnRec;
-    } else if (column > 0 && !gameState[row][column - 1]) {
+    }
+    if (column > 0 && gameState[row][column - 1] === null) {
       const columnRec = column - 1;
       const emptyBelow = checkEmptyBelow(gameState, row, columnRec);
       if (!emptyBelow) return columnRec;
@@ -185,6 +186,7 @@ const checkMovesColumnStraight = (gameState, row, column, numConnected) => {
   log("column straight", connectedColumnStraight, row, column);
   if (
     connectedColumnStraight >= numConnected &&
+    gameState[row - numConnected][column] === null &&
     getRow(gameState, column) !== undefined
   ) {
     return column;
@@ -200,35 +202,51 @@ const checkMovesColumnForward = (gameState, row, column, numConnected) => {
     "forward"
   );
   log("column forward", connectedColumnForward, row, column);
+  const columnRecRight = endColumnForward + 1;
+  const checkRowRight = row - numConnected;
+  const emptyBelowRight = checkEmptyBelow(gameState, checkRowRight, columnRecRight);
   if (
     connectedColumnForward >= numConnected &&
-    row[endColumnForward + 1] &&
-    getRow(gameState, column) !== undefined
-  ) {
-    const columnRec = endColumnForward + 1;
-    const emptyBelow = checkEmptyBelow(gameState, row, columnRec);
-    if (!emptyBelow) return columnRec;
+    gameState[checkRowRight][columnRecRight] === null &&
+    getRow(gameState, column) !== undefined &&
+    !emptyBelowRight
+  ) return columnRecRight;
+
+  if (row < 5 && column > 0) {
+    const columnRecLeft = column - 1;
+    const checkRowLeft = row + 1;
+    const emptyBelowLeft = checkEmptyBelow(gameState, checkRowLeft, columnRecLeft);
+    if (gameState[checkRowLeft][columnRecLeft] === null && !emptyBelowLeft) return columnRecLeft;
   }
+
   return null;
 };
 
 const checkMovesColumnBackward = (gameState, row, column, numConnected) => {
-  const connectedColumnBackward = countConnectedColumn(
+  const [connectedColumnBackward, endColumnBackward] = countConnectedColumn(
     gameState,
     row,
     column,
     "backward"
-  )[0];
+  );
   log("column backward", connectedColumnBackward, row, column);
+  const columnRecRight = endColumnBackward - 1;
+  const checkRowRight = row - numConnected;
+  const emptyBelow = checkEmptyBelow(gameState, checkRowRight, columnRecRight);
   if (
     connectedColumnBackward >= numConnected &&
-    row[column - 1] &&
-    getRow(gameState, column) !== undefined
-  ) {
-    const columnRec = column - 1;
-    const emptyBelow = checkEmptyBelow(gameState, row, columnRec);
-    if (!emptyBelow) return columnRec;
+    gameState[checkRowRight][columnRecRight] === null &&
+    getRow(gameState, column) !== undefined &&
+    !emptyBelow
+  ) return columnRecRight;
+
+  if (row > 0 && column < 6) {
+    const columnRecLeft = column + 1;
+    const checkRowLeft = row - 1;
+    const emptyBelowLeft = checkEmptyBelow(gameState, checkRowLeft, columnRecLeft);
+    if (gameState[checkRowLeft][columnRecLeft] === null && !emptyBelowLeft) return columnRecLeft;
   }
+
   return null;
 };
 
