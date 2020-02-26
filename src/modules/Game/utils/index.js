@@ -127,7 +127,7 @@ const checkMoves = (gameState, color, numConnected, type) => {
         const columnRec = checkMovesRow(gameState, row, column, numConnected);
         if (columnRec !== null) return columnRec;
 
-        if (row >= 3) {
+        if (row >= 3) { // check if column wins are possible (enough rows above)
           const columnRecStraight = checkMovesColumnStraight(
             gameState,
             row,
@@ -160,14 +160,14 @@ const checkMoves = (gameState, color, numConnected, type) => {
 
 const checkMovesRow = (gameState, row, column, numConnected) => {
   const [connectedRow, endColumn] = countConnectedRow(gameState[row], column);
-  if (endColumn <= 5 && connectedRow >= numConnected) {
+  if (endColumn <= 5 && connectedRow >= numConnected) { // check if there are additional columns to the right (end column <= 5)
     log("row", connectedRow, row, column);
     if (gameState[row][endColumn + 1] === null) {
       const columnRec = endColumn + 1;
       const emptyBelow = checkEmptyBelow(gameState, row, columnRec);
       if (!emptyBelow) return columnRec;
     }
-    if (column > 0 && gameState[row][column - 1] === null) {
+    if (column > 0 && gameState[row][column - 1] === null) { // check if there are additional columns to the left (column > 0)
       const columnRec = column - 1;
       const emptyBelow = checkEmptyBelow(gameState, row, columnRec);
       if (!emptyBelow) return columnRec;
@@ -186,8 +186,8 @@ const checkMovesColumnStraight = (gameState, row, column, numConnected) => {
   log("column straight", connectedColumnStraight, row, column);
   if (
     connectedColumnStraight >= numConnected &&
-    gameState[row - numConnected][column] === null &&
-    getRow(gameState, column) !== undefined
+    gameState[row - numConnected][column] === null && // check if space is taken
+    getRow(gameState, column) !== undefined           // check if column is full
   ) {
     return column;
   }
@@ -211,13 +211,13 @@ const checkMovesColumnForward = (gameState, row, column, numConnected) => {
   );
   if (
     connectedColumnForward >= numConnected &&
-    gameState[checkRowRight][columnRecRight] === null &&
-    getRow(gameState, column) !== undefined &&
+    gameState[checkRowRight][columnRecRight] === null && // check if space is taken
+    getRow(gameState, column) !== undefined &&           // check if column is full
     !emptyBelowRight
   )
     return columnRecRight;
 
-  if (row > 0 && column > 0) {
+  if (row > 0 && column > 0) { // check if space is within bounds
     const columnRecLeft = column - 1;
     const checkRowLeft = row - 1;
     const emptyBelowLeft = checkEmptyBelow(
@@ -243,16 +243,15 @@ const checkMovesColumnBackward = (gameState, row, column, numConnected) => {
   const columnRecRight = endColumnBackward - 1;
   const checkRowRight = row - numConnected;
   const emptyBelow = checkEmptyBelow(gameState, checkRowRight, columnRecRight);
-  debugger;
   if (
     connectedColumnBackward >= numConnected &&
-    gameState[checkRowRight][columnRecRight] === null &&
-    getRow(gameState, column) !== undefined &&
+    gameState[checkRowRight][columnRecRight] === null && // check if space is taken
+    getRow(gameState, column) !== undefined &&           // check if column is full
     !emptyBelow
   )
     return columnRecRight;
 
-  if (row < 5 && column < 6) {
+  if (row < 5 && column < 6) { // check if space is within bounds
     const columnRecLeft = column + 1;
     const checkRowLeft = row + 1;
     const emptyBelowLeft = checkEmptyBelow(
