@@ -82,13 +82,15 @@ export const winner = gameState => {
  */
 export const figureNextMove = (gameState, color) => {
   const move = nextMove(gameState, color, 3);
+  if (move !== null) return move;
 
-  return move !== null ? move : Math.floor(Math.random() * 6);
+  const row = getRow(gameState, 3);
+  return row !== undefined ? 3 : Math.floor(Math.random() * 6);
 };
 
 const nextMove = (gameState, color, numConnected) => {
   let counter = numConnected;
-  while (counter > 0) {
+  while (counter > 1) {
     const offenseMove = checkMoves(gameState, color, counter);
     if (offenseMove !== null) return offenseMove;
     const defenseMove = checkMoves(gameState, color, counter, "defense");

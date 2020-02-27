@@ -124,6 +124,14 @@ const checkMoves = (gameState, color, numConnected, type) => {
   for (let row = gameState.length - 1; row >= 0; row--) {
     for (let column = 0; column < 7; column++) {
       if (gameState[row][column] === checkColor) {
+        const columnRecRow = checkMovesRow(
+          gameState,
+          row,
+          column,
+          numConnected
+        );
+        if (columnRecRow !== null) return columnRecRow;
+
         if (row >= 3) {
           // check if column wins are possible (enough rows above)
           const columnRecStraight = checkMovesColumnStraight(
@@ -150,9 +158,6 @@ const checkMoves = (gameState, color, numConnected, type) => {
           );
           if (columnRecBackward !== null) return columnRecBackward;
         }
-
-        const columnRec = checkMovesRow(gameState, row, column, numConnected);
-        if (columnRec !== null) return columnRec;
       }
     }
   }
