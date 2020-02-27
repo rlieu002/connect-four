@@ -58,6 +58,22 @@ const countConnectedRow = (rowArr, column) => {
   return [numConnected, endColumn];
 };
 
+// checks for breaks that need to be defended
+const checkRowBreak = (rowArr, column, color) => {
+  let numColor = 1;
+  let breakColumn;
+
+  for (let i = column; i < column + 3; i++) {
+    if (rowArr[i] === color) {
+      numColor++;
+    } else if (rowArr[i] === null) {
+      breakColumn = i;
+    }
+    if (numColor === 3 && !!breakColumn) return breakColumn;
+  }
+  return null;
+};
+
 // counts number of connected moves within a column (straight, diagonal forward, diagonal backwards)
 const countConnectedColumn = (gameState, row, column, type) => {
   let numConnected = 1;
@@ -128,7 +144,8 @@ const checkMoves = (gameState, color, numConnected, type) => {
           gameState,
           row,
           column,
-          numConnected
+          numConnected,
+          checkColor
         );
         if (columnRecRow !== null) return columnRecRow;
 
@@ -164,7 +181,9 @@ const checkMoves = (gameState, color, numConnected, type) => {
   return null;
 };
 
-const checkMovesRow = (gameState, row, column, numConnected) => {
+const checkMovesRow = (gameState, row, column, numConnected, color) => {
+  const breakColumn = checkRowBreak(gameState[row], column, color);
+  if (breakColumn) return breakColumn;
   const [connectedRow, endColumn] = countConnectedRow(gameState[row], column);
   if (endColumn <= 5 && connectedRow >= numConnected) {
     // check if there are additional columns to the right (end column <= 5)
