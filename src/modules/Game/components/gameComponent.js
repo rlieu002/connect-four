@@ -1,20 +1,15 @@
 import React, { Component } from "react";
-import * as cf from "../connectFour";
+import * as cf from "../utils";
 import logo from "../../../assets/logo.svg";
+import { CONSTS } from "../../../constants";
 
 export default class Game extends Component {
   constructor() {
     super();
 
+    const gameState = JSON.parse(JSON.stringify(CONSTS.newGameState));
     this.state = {
-      gameState: [
-        [null, null, null, null, null, null, null],
-        [null, null, null, null, null, null, null],
-        [null, null, null, null, null, null, null],
-        [null, null, null, null, null, null, null],
-        [null, null, null, null, null, null, null],
-        [null, null, null, null, null, null, null]
-      ],
+      gameState,
       mode: "1",
       winner: null
     };
@@ -45,7 +40,7 @@ export default class Game extends Component {
       return <tr key={rowIndex}>{columns}</tr>;
     });
 
-    const buttonRow = [0, 1, 2, 3, 4, 5, 6].map(button => (
+    const buttonRow = CONSTS.buttonRow.map(button => (
       <td key={button} style={styles.cell}>
         <button
           style={styles.moveButton}
@@ -69,11 +64,10 @@ export default class Game extends Component {
   }
 
   onClickMove(e) {
-    const move = e.target.value;
+    const move = Number(e.target.value);
     const { gameState, winner, mode } = this.state;
     if (!winner) {
       const color = cf.getCurrentPlayer(gameState);
-
       const newGameState = cf.play(gameState, move, color);
       if (cf.isStateValid(newGameState)) {
         this.setState(
@@ -97,16 +91,9 @@ export default class Game extends Component {
   }
 
   onClickRestart() {
-    const newGameState = [
-      [null, null, null, null, null, null, null],
-      [null, null, null, null, null, null, null],
-      [null, null, null, null, null, null, null],
-      [null, null, null, null, null, null, null],
-      [null, null, null, null, null, null, null],
-      [null, null, null, null, null, null, null]
-    ];
+    const gameState = JSON.parse(JSON.stringify(CONSTS.newGameState));
     this.setState({
-      gameState: newGameState,
+      gameState,
       winner: null
     });
   }
