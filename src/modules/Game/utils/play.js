@@ -1,22 +1,12 @@
-import {
-  countColors,
-  checkEmptySlots,
-  getRow,
-  countConnectedRow,
-  checkColumnWin,
-  checkMoves
-} from "./utils";
-
 /**
  * @param gameState state of the game represented as a two dimensional array
- * @return color represented by a string
+ * @return player color represented by a string
  */
-
 export const getCurrentPlayer = gameState => {
   const [numYellow, numRed] = countColors(gameState);
 
-  const turn = numYellow > numRed ? "r" : "y";
-  return turn;
+  const color = numYellow > numRed ? "r" : "y";
+  return color;
 };
 
 /**
@@ -43,7 +33,7 @@ export const isStateValid = gameState => {
  * @param gameState state of the game represented as a two dimensional array
  * @param column column represented as a number
  * @param color color represented by a string
- * @return new state of the game represented as a two dimensional array
+ * @return new game state represented as a two dimensional array
  */
 export const play = (gameState, column, color) => {
   let newGameState = gameState;
@@ -57,47 +47,46 @@ export const play = (gameState, column, color) => {
   return newGameState;
 };
 
-/**
- * @param gameState state of the game represented as a two dimensional array
- * @return winner exists represented by boolean
- */
-export const winner = gameState => {
-  for (let row = gameState.length - 1; row >= 0; row--) {
+// counts number of yellow and red moves
+const countColors = gameState => {
+  let numYellow = 0;
+  let numRed = 0;
+
+  gameState.forEach(row => {
+    row.forEach(column => {
+      if (column === "y") {
+        numYellow++;
+      } else if (column === "r") {
+        numRed++;
+      }
+    });
+  });
+  return [numYellow, numRed];
+};
+
+// checks if there are empty slots below existing moves
+const checkEmptySlots = gameState => {
+  for (let row = gameState.length - 2; row >= 0; row--) {
     for (let column = 0; column < 7; column++) {
       if (gameState[row][column]) {
-        if (column <= 3 && countConnectedRow(gameState[row], column)[0] === 4)
-          return true;
-        if (row >= 3 && checkColumnWin(gameState, row, column)) return true;
+        if (!gameState[row + 1][column]) return true;
       }
     }
   }
-
   return false;
 };
 
-/**
- * @param gameState state of the game represented as a two dimensional array
- * @param color color represented by a string
- * @return column represented as a number
- */
-export const figureNextMove = (gameState, color) => {
-  const move = nextMove(gameState, color, 3);
-  if (move !== null) return move;
+// gets next row based on current column
+export const getRow = (gameState, column) => {
+  let row = gameState.length - 1;
 
-  const row = getRow(gameState, 3);
-  return row !== undefined ? 3 : Math.floor(Math.random() * 6);
-};
-
-const nextMove = (gameState, color, numConnected) => {
-  let counter = numConnected;
-  while (counter > 1) {
-    const offenseMove = checkMoves(gameState, color, counter);
-    if (offenseMove !== null) return offenseMove;
-    const defenseMove = checkMoves(gameState, color, counter, "defense");
-    if (defenseMove !== null) return defenseMove;
-    counter--;
+  while (row >= 0) {
+    if (gameState[row][column]) {
+      row--;
+    } else {
+      return row;
+    }
   }
-  return null;
 };
 
 // Bonus

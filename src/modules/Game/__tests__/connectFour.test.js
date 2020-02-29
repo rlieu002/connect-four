@@ -1,6 +1,18 @@
-import * as cf from "../connectFour";
+import {
+  isStateValid,
+  winner,
+  getCurrentPlayer,
+  figureNextMove,
+  play,
+  getRow,
+  isHorizontalMatch,
+  countHorizontalMatch,
+  countVerticalMatch,
+  isDiagonalMatch,
+  countDiagonalMatch,
+} from "../utils";
 
-test("straight column wins identified", () => {
+test("vertical column wins identified", () => {
   const gameStateBefore = [
     [null, null, null, null, null, null, null],
     [null, null, null, null, null, null, null],
@@ -19,29 +31,35 @@ test("straight column wins identified", () => {
     [null, null, "y", "r", "y", null, null]
   ];
 
-  const validStateBefore = cf.isStateValid(gameStateBefore);
+  const validStateBefore = isStateValid(gameStateBefore);
   expect(validStateBefore).toBe(true);
 
-  const winnerExistsBefore = cf.winner(gameStateBefore);
+  const winnerExistsBefore = winner(gameStateBefore);
   expect(winnerExistsBefore).toBe(false);
 
-  const currentPlayer = cf.getCurrentPlayer(gameStateBefore);
+  const currentPlayer = getCurrentPlayer(gameStateBefore);
   expect(currentPlayer).toBe("r");
 
-  const nextMove = cf.figureNextMove(gameStateBefore, currentPlayer);
+  const nextMove = figureNextMove(gameStateBefore, currentPlayer);
   expect(nextMove).toBe(3);
 
-  const newGameState = cf.play(gameStateBefore, nextMove, currentPlayer);
+  const row = getRow(gameStateBefore, nextMove);
+  expect(row).toBe(2);
+
+  const newGameState = play(gameStateBefore, nextMove, currentPlayer);
   expect(newGameState).toEqual(gameStateAfter);
 
-  const validStateAfter = cf.isStateValid(newGameState);
+  const validStateAfter = isStateValid(newGameState);
   expect(validStateAfter).toBe(true);
 
-  const winnerExistsAfter = cf.winner(gameStateAfter);
+  const verticalMatch = countVerticalMatch(newGameState, row, nextMove, currentPlayer, 4);
+  expect(verticalMatch).toBe(4);
+
+  const winnerExistsAfter = winner(gameStateAfter);
   expect(winnerExistsAfter).toBe(true);
 });
 
-test("forward diagonal column wins identified", () => {
+test("backward diagonal (top down) column wins identified", () => {
   const gameStateBefore = [
     [null, null, null, null, null, null, null],
     [null, null, null, null, null, null, null],
@@ -60,29 +78,38 @@ test("forward diagonal column wins identified", () => {
     [null, "r", "y", "y", "r", null, null]
   ];
 
-  const validStateBefore = cf.isStateValid(gameStateBefore);
+  const validStateBefore = isStateValid(gameStateBefore);
   expect(validStateBefore).toBe(true);
 
-  const winnerExistsBefore = cf.winner(gameStateBefore);
+  const winnerExistsBefore = winner(gameStateBefore);
   expect(winnerExistsBefore).toBe(false);
 
-  const currentPlayer = cf.getCurrentPlayer(gameStateBefore);
+  const currentPlayer = getCurrentPlayer(gameStateBefore);
   expect(currentPlayer).toBe("r");
 
-  const nextMove = cf.figureNextMove(gameStateBefore, currentPlayer);
+  const nextMove = figureNextMove(gameStateBefore, currentPlayer);
   expect(nextMove).toBe(4);
 
-  const newGameState = cf.play(gameStateBefore, nextMove, currentPlayer);
+  const row = getRow(gameStateBefore, nextMove);
+  expect(row).toBe(2);
+
+  const newGameState = play(gameStateBefore, nextMove, currentPlayer);
   expect(newGameState).toEqual(gameStateAfter);
 
-  const validStateAfter = cf.isStateValid(newGameState);
+  const validStateAfter = isStateValid(newGameState);
   expect(validStateAfter).toBe(true);
 
-  const winnerExistsAfter = cf.winner(gameStateAfter);
+  const numberDiagonal = countDiagonalMatch(newGameState, row, nextMove, currentPlayer, 4);
+  expect(numberDiagonal).toBe(4);
+
+  const diagonalMatch = isDiagonalMatch(newGameState, row, nextMove, currentPlayer, 4);
+  expect(diagonalMatch).toBe(true);
+
+  const winnerExistsAfter = winner(gameStateAfter);
   expect(winnerExistsAfter).toBe(true);
 });
 
-test("backward diagonal column wins identified", () => {
+test("forward diagonal (top down) column wins identified", () => {
   const gameStateBefore = [
     [null, null, null, null, null, null, null],
     [null, null, null, null, null, null, null],
@@ -101,29 +128,38 @@ test("backward diagonal column wins identified", () => {
     [null, null, "y", "y", "r", "r", null]
   ];
 
-  const validStateBefore = cf.isStateValid(gameStateBefore);
+  const validStateBefore = isStateValid(gameStateBefore);
   expect(validStateBefore).toBe(true);
 
-  const winnerExistsBefore = cf.winner(gameStateBefore);
+  const winnerExistsBefore = winner(gameStateBefore);
   expect(winnerExistsBefore).toBe(false);
 
-  const currentPlayer = cf.getCurrentPlayer(gameStateBefore);
+  const currentPlayer = getCurrentPlayer(gameStateBefore);
   expect(currentPlayer).toBe("r");
 
-  const nextMove = cf.figureNextMove(gameStateBefore, currentPlayer);
+  const nextMove = figureNextMove(gameStateBefore, currentPlayer);
   expect(nextMove).toBe(2);
 
-  const newGameState = cf.play(gameStateBefore, nextMove, currentPlayer);
+  const row = getRow(gameStateBefore, nextMove);
+  expect(row).toBe(2);
+
+  const newGameState = play(gameStateBefore, nextMove, currentPlayer);
   expect(newGameState).toEqual(gameStateAfter);
 
-  const validStateAfter = cf.isStateValid(newGameState);
+  const validStateAfter = isStateValid(newGameState);
   expect(validStateAfter).toBe(true);
 
-  const winnerExistsAfter = cf.winner(gameStateAfter);
+  const numberDiagonal = countDiagonalMatch(newGameState, row, nextMove, currentPlayer, 4, "forward");
+  expect(numberDiagonal).toBe(4);
+
+  const diagonalMatch = isDiagonalMatch(newGameState, row, nextMove, currentPlayer, 4);
+  expect(diagonalMatch).toBe(true);
+
+  const winnerExistsAfter = winner(gameStateAfter);
   expect(winnerExistsAfter).toBe(true);
 });
 
-test("row wins identified", () => {
+test("horizontal wins identified", () => {
   const gameStateBefore = [
     [null, null, null, null, null, null, null],
     [null, null, null, null, null, null, null],
@@ -139,27 +175,36 @@ test("row wins identified", () => {
     [null, null, null, null, null, null, null],
     [null, null, null, "r", null, null, null],
     [null, null, "r", "r", null, null, null],
-    [null, null, "y", "y", "y", "y", null]
+    [null, "y", "y", "y", "y", null, null]
   ];
 
-  const validStateBefore = cf.isStateValid(gameStateBefore);
+  const validStateBefore = isStateValid(gameStateBefore);
   expect(validStateBefore).toBe(true);
 
-  const winnerExistsBefore = cf.winner(gameStateBefore);
+  const winnerExistsBefore = winner(gameStateBefore);
   expect(winnerExistsBefore).toBe(false);
 
-  const currentPlayer = cf.getCurrentPlayer(gameStateBefore);
+  const currentPlayer = getCurrentPlayer(gameStateBefore);
   expect(currentPlayer).toBe("y");
 
-  const nextMove = cf.figureNextMove(gameStateBefore, currentPlayer);
-  expect(nextMove).toBe(5);
+  const nextMove = figureNextMove(gameStateBefore, currentPlayer);
+  expect(nextMove).toBe(1);
 
-  const newGameState = cf.play(gameStateBefore, nextMove, currentPlayer);
+  const row = getRow(gameStateBefore, nextMove);
+  expect(row).toBe(5);
+
+  const newGameState = play(gameStateBefore, nextMove, currentPlayer);
   expect(newGameState).toEqual(gameStateAfter);
 
-  const validStateAfter = cf.isStateValid(newGameState);
+  const validStateAfter = isStateValid(newGameState);
   expect(validStateAfter).toBe(true);
 
-  const winnerExistsAfter = cf.winner(gameStateAfter);
+  const numberHorizontal = countHorizontalMatch(newGameState, row, 1, currentPlayer, 4);
+  expect(numberHorizontal).toBe(4);
+
+  const horizontalMatch = isHorizontalMatch(newGameState, row, 1, currentPlayer, 4);
+  expect(horizontalMatch).toBe(true);
+
+  const winnerExistsAfter = winner(gameStateAfter);
   expect(winnerExistsAfter).toBe(true);
 });
