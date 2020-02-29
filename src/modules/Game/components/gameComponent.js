@@ -52,8 +52,10 @@ export default class Game extends Component {
 
     return (
       <table border="1">
-        {tableRows}
-        <tr>{buttonRow}</tr>
+        <tbody>
+          {tableRows}
+          <tr>{buttonRow}</tr>
+        </tbody>
       </table>
     );
   }

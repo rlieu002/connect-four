@@ -27,7 +27,7 @@ const isWinner = (gameState, row, column, color) => {
   );
 };
 
-// check if space is within bounds
+// check if space matches color and is within bounds
 const isValue = (gameState, row, column, color) => {
   try {
     return gameState[row][column] === color;
